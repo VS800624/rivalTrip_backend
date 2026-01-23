@@ -2,7 +2,10 @@ require("dotenv").config()
 const express = require("express")
 const app = express()
 const connectDB = require("./config/database")
+const popularDestinationsRouter = require("./routes/popularDestination")
 
+
+app.use("/api", popularDestinationsRouter)
 
 connectDB()
   .then(() => {
