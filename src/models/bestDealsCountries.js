@@ -1,13 +1,15 @@
 const mongoose = require("mongoose")
 
-const popularDestinationSchema = new mongoose.Schema({
-  slug: {
+const bestDealsCountriesSchema = new mongoose.Schema({
+
+   slug: {
     type: String,
     required: true,
     unique: true,
     lowercase: true,
     trim: true,
   },
+
   countryName: {
     type: String,
     required: true
@@ -46,6 +48,8 @@ const popularDestinationSchema = new mongoose.Schema({
   ],
 
   travelTips: [String]
+
 }, {timestamps: true})
 
-module.exports = new mongoose.model("PopularDestination", popularDestinationSchema)
+const BestDealsCountries = new mongoose.model("BestDealsCountries", bestDealsCountriesSchema)
+module.exports = BestDealsCountries
