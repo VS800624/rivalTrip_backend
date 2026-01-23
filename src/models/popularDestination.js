@@ -1,51 +1,56 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const popularDestinationSchema = new mongoose.Schema({
-  slug: {
-    type: String,
-    required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
+const sectionItemSchema = new mongoose.Schema(
+  {
+    name: String,
+    description: String,
+    image: String,
   },
-  countryName: {
-    type: String,
-    required: true
+  { _id: false }
+);
+
+const sectionSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      required: true,
+    },
+    title: String,
+    description: String,
+    image: String,
+
+    // for sections like iconic_sights, food, travel_tips, etc.
+    items: [sectionItemSchema],
   },
-  city: {
-    type: String,
-    required: true
+  { _id: false }
+);
+
+const popularDestinationSchema = new mongoose.Schema(
+  {
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    countryName: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    img: String,
+    headerImg: String,
+
+    sections: [sectionSchema],
   },
-  img: String,
-  headerImg: String,
+  { timestamps: true }
+);
 
-  sections: [
-    {
-      title: String,
-      description: String,
-      image: String
-    },
-  ],
-
-  iconicSights: [
-    {
-      name: String,
-      description: String,
-      image: String,
-    },
-  ],
-
-  experiences: [String],
-
-  foodItems: [
-    {
-      name: String,
-      description: String,
-      image: String,
-    },
-  ],
-
-  travelTips: [String]
-}, {timestamps: true})
-
-module.exports = new mongoose.model("PopularDestination", popularDestinationSchema)
+module.exports = mongoose.model(
+  "PopularDestination",
+  popularDestinationSchema
+);
