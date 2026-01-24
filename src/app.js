@@ -3,9 +3,11 @@ const express = require("express")
 const app = express()
 const connectDB = require("./config/database")
 const popularDestinationsRouter = require("./routes/popularDestination")
+const bestDealsCountriesRouter = require("./routes/bestDealsCountries")
 
 
 app.use("/api", popularDestinationsRouter)
+app.use("/api", bestDealsCountriesRouter)
 
 connectDB()
   .then(() => {
