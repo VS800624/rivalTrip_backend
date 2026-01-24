@@ -1,9 +1,27 @@
 require("dotenv").config()
 const express = require("express")
 const app = express()
+const cors = require("cors")
 const connectDB = require("./config/database")
 const popularDestinationsRouter = require("./routes/popularDestination")
 const bestDealsCountriesRouter = require("./routes/bestDealsCountries")
+
+// Setup cors
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "https://rivaltrip.netlify.app/",
+    ],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    // credentials: true,
+  })
+)
+
+
+// parsing
+app.use(express.json())
 
 
 app.use("/api", popularDestinationsRouter)
