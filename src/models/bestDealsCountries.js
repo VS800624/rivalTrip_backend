@@ -1,55 +1,47 @@
 const mongoose = require("mongoose")
 
-const bestDealsCountriesSchema = new mongoose.Schema({
+const sectionItemSchema = new mongoose.Schema({
+    name: String,
+    description: String,
+    image: String,
+}, {_id: false})
 
-   slug: {
+const sectionSchema = new mongoose.Schema({
+  type: {
     type: String,
     required: true,
-    unique: true,
-    lowercase: true,
-    trim: true,
   },
+    title: String,
+    description: String,
+    image: String,
 
-  countryName: {
-    type: String,
-    required: true
-  },
-  city: {
-    type: String,
-    required: true
-  },
-  img: String,
-  headerImg: String,
+    // for sections like iconic_sights, food, travel_tips, etc.
+    items: [sectionItemSchema],
+}, {_id: false})
 
-  sections: [
-    {
-      title: String,
-      description: String,
-      image: String
+const bestDealsCountriesSchema = new mongoose.Schema({
+    slug: {
+      type: String,
+      required: true,
+      lowercase: true,
+      unique: true,
+      trim: true,
     },
-  ],
-
-  iconicSights: [
-    {
-      name: String,
-      description: String,
-      image: String,
+    countryName: {
+      type: String,
+      required: true
     },
-  ],
-
-  experiences: [String],
-
-  foodItems: [
-    {
-      name: String,
-      description: String,
-      image: String,
+    city: {
+      type: String,
+      required: true
     },
-  ],
 
-  travelTips: [String]
+    img: String,
+    headerImg: String,
 
-}, {timestamps: true})
+    sections: [sectionSchema],
+
+}, {timestamps: true}) 
 
 const BestDealsCountries = new mongoose.model("BestDealsCountries", bestDealsCountriesSchema)
 module.exports = BestDealsCountries
