@@ -15,9 +15,9 @@ const sectionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    title: String,
-    description: String,
-    image: String,
+      title: String,
+      description: String,
+      image: String,
 
     // for sections like iconic_sights, food, travel_tips, etc.
     items: [sectionItemSchema],

@@ -14,10 +14,10 @@ const seedData = async() => {
     console.log("Data Added Successfully")
   } catch(error){
     console.log("Seeding failed: ", error)
-    process.exit(1)
+    process.exit(1)       // error exit
   } finally{
     await mongoose.connection.close()
-    process.exit(0)
+    process.exit(0)        // successful exit
   }
 }
 
