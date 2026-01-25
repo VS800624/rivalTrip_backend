@@ -38,10 +38,13 @@ const bestDealsCountriesSchema = new mongoose.Schema({
 
     img: String,
     headerImg: String,
+    discount: String,
+    price: String,
+
 
     sections: [sectionSchema],
 
 }, {timestamps: true}) 
 
-const BestDealsCountries = new mongoose.model("BestDealsCountries", bestDealsCountriesSchema)
+const BestDealsCountries = mongoose.model("BestDealsCountries", bestDealsCountriesSchema)
 module.exports = BestDealsCountries

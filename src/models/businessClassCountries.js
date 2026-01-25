@@ -29,7 +29,7 @@ const businessClassCountriesSchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    lowerCase: true,
+    lowercase: true,
     trim: true,
     unique:true,
   },
@@ -43,8 +43,11 @@ const businessClassCountriesSchema = new mongoose.Schema({
     },
     img: String,
     headerImg: String,
+    discount: String,
+    price: String,
+
 
     sections: [sectionSchema],
   }, {timestamps: true})
 
-module.exports = new mongoose.model("BusinessClassCountries", businessClassCountriesSchema)
+module.exports = mongoose.model("BusinessClassCountries", businessClassCountriesSchema)

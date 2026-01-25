@@ -44,6 +44,9 @@ const popularDestinationSchema = new mongoose.Schema(
     },
     img: String,
     headerImg: String,
+    discount: String,
+    price: String,
+
 
     sections: [sectionSchema],
   },
