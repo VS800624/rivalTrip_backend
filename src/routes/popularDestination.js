@@ -6,9 +6,9 @@ const popularDestinationsRouter = express.Router()
 popularDestinationsRouter.get("/popular-destinations", async(req,res) => {
   try {
     const popularCountries = await PopularDestination.find({})
-    res.json({message: "Fetched popular countries data successfully" ,  popularCountries})
+    res.status(200).json({message: "Fetched popular countries data successfully" ,  popularCountries})
   } catch(err){
-    res.status(400).json({message: err.message})
+    res.status(500).json({message: err.message})
   }
 })
 

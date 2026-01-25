@@ -6,9 +6,9 @@ const bestDealsCountriesRouter = express.Router()
 bestDealsCountriesRouter.get("/best-deals", async(req,res) => {
   try {
     const bestDealsCountries = await BestDealsCountries.find({}) 
-    res.json({message: "Fetched Best Deals Countries Data Successfully", bestDealsCountries})
+    res.status(200).json({message: "Fetched Best Deals Countries Data Successfully", bestDealsCountries})
   } catch(err){
-    res.status(400).json({message: err.message})
+    res.status(500).json({message: err.message})
   }
 })
 
