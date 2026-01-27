@@ -6,6 +6,7 @@ const connectDB = require("./config/database")
 const popularDestinationsRouter = require("./routes/popularDestination")
 const bestDealsCountriesRouter = require("./routes/bestDealsCountries")
 const businessClassCountriesRouter = require("./routes/businessClassCountires")
+const destinationsSlugRouter = require("./routes/getDestinationsBySlug")
 
 // Setup cors
 app.use(
@@ -28,6 +29,7 @@ app.use(express.json())
 app.use("/api", popularDestinationsRouter)
 app.use("/api", bestDealsCountriesRouter)
 app.use("/api", businessClassCountriesRouter)
+app.use("/api", destinationsSlugRouter)
 
 connectDB()
   .then(() => {
