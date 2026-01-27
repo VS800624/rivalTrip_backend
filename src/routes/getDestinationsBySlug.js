@@ -4,7 +4,7 @@ const BestDealsCountries = require("../models/bestDealsCountries")
 const BusinessClassCountries = require("../models/businessClassCountries")
 const destinationsSlugRouter = express.Router()
 
-destinationsSlugRouter.get("/:slug", async(req,res) => {
+destinationsSlugRouter.get("/destination/:slug", async(req,res) => {
   try{
 
     const {slug} = req.params
@@ -22,7 +22,7 @@ destinationsSlugRouter.get("/:slug", async(req,res) => {
 
     
     if (!destination){
-      return res.status(400).json({success:false, message: "Destination not found"})
+      return res.status(404).json({success:false, message: "Destination not found"})
     }
     
     res.status(200).json({success: true,message: "Successfully fetched destinations" , destination})
