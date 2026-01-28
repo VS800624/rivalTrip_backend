@@ -5,9 +5,10 @@ const bestDealsCountriesRouter = express.Router();
 // Get best deals countries
 bestDealsCountriesRouter.get("/best-deals", async (req, res) => {
   try {
+    const limit = praseInt(req.query.limit) || 0
     const bestDealsCountries = await BestDealsCountries.find({}).sort({
       countryName: 1,
-    });
+    }).limit(limit);
     res
       .status(200)
       .json({
