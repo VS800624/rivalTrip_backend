@@ -52,7 +52,7 @@ const userSchema = new mongoose.Schema({
 // Token contains: User _id
 // Token expires in 1 day
 // This token proves the user is logged in
-userSchema.methods.generateAuthToken() = async function(){
+userSchema.methods.generateAuthToken = async function(){
   const user = this;
   // jwt.sign(payload, secret, options)
   const token = await jwt.sign({_id: user._id}, process.env.JWT_SECRET, {
@@ -61,7 +61,7 @@ userSchema.methods.generateAuthToken() = async function(){
   return token
 }
 
-userSchema.methods.validatePassword() = async function(passwordInputByUser){
+userSchema.methods.validatePassword = async function(passwordInputByUser){
   const user = this;
   const passwordHash = user.password
   // bcrypt.compare(plainText, hash)

@@ -7,6 +7,8 @@ const popularDestinationsRouter = require("./routes/popularDestination")
 const bestDealsCountriesRouter = require("./routes/bestDealsCountries")
 const businessClassCountriesRouter = require("./routes/businessClassCountires")
 const destinationsSlugRouter = require("./routes/getDestinationsBySlug")
+const cookieParser = require("cookie-parser")
+const authRouter = require("./routes/auth")
 
 // Setup cors
 app.use(
@@ -24,12 +26,14 @@ app.use(
 
 // parsing
 app.use(express.json())
+app.use(cookieParser())
 
 
 app.use("/api", popularDestinationsRouter)
 app.use("/api", bestDealsCountriesRouter)
 app.use("/api", businessClassCountriesRouter)
 app.use("/api", destinationsSlugRouter)
+app.use("/api", authRouter)
 
 connectDB()
   .then(() => {
