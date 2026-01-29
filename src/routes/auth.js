@@ -23,11 +23,38 @@ authRouter.post("/sign-up", async(req,res) => {
       password: passwordHash
     })
 
+    // Save user in DB
     const savedUser = await user.save()
+    // Create JWT token
+    const token = await savedUser.generateAuthToken()
 
+    // res.cookie("token", token, {
+    //    expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
+    //     httpOnly: true,
+    // })
 
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: true,        // REQUIRED for HTTPS (Render)
+    //   sameSite: "none",    // REQUIRED for Netlify → Render
+    //   maxAge: 24 * 60 * 60 * 1000, // 1 day
+    // });
+
+    const userResponse = savedUser.toObject();
+    delete userResponse.password;
+    
+    res.json({message: "User added successfully", userResponse, token})
     
   }catch(err){
-    res.status(500).json({message: err.message})
+    if (err.name === "ValidationError") {
+    return res.status(400).json({ message: "ERROR: " + err.message })
+  }
+
+  if (err.code === 11000) {
+    return res.status(409).json({ message: "Email already exists" });
+  }
+
+   res.status(500).json({ message: "Internal Server Error" });
+  
   }
 })
