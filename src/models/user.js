@@ -61,7 +61,13 @@ userSchema.methods.generateAuthToken() = async function(){
   return token
 }
 
-
+userSchema.methods.validatePassword() = async function(passwordInputByUser){
+  const user = this;
+  const passwordHash = user.password
+  // bcrypt.compare(plainText, hash)
+  const isPasswordValid = await bcrypt.compare(passwordInputByUser, passwordHash)
+  return isPasswordValid
+}
 
 
 const User = mongoose.model("User", userSchema)
