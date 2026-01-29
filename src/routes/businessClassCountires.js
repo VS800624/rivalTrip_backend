@@ -8,7 +8,7 @@ businessClassCountriesRouter.get("/business-class", async (req, res) => {
     const limit = parseInt(req.query.limit) || 0
     const businessClassCountries = await BusinessClassCountries.find({}).sort({
       countryName: 1,
-    }).limit();
+    }).limit(limit);
     res
       .status(200)
       .json({
