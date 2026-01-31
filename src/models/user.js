@@ -1,6 +1,7 @@
 const mongoose = require("mongoose")
 const validator = require("validator")
 const jwt = require("jsonwebtoken")
+const bcrypt = require("bcrypt")
 
 
 const userSchema = new mongoose.Schema({
@@ -33,7 +34,7 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    select: false,   //select: false hides password in queries
+    select: false,   //select: false hides password in queries i.e Do NOT return password field in normal queries
     validate(value){
       if(!validator.isStrongPassword(value)){
         throw new Error("Please enter a strong password");
@@ -62,6 +63,13 @@ userSchema.methods.generateAuthToken = async function(){
 }
 
 userSchema.methods.validatePassword = async function(passwordInputByUser){
+  if (!passwordInputByUser) {
+    throw new Error("Password not provided");
+  }
+
+  if (!this.password) {
+    throw new Error("User password not found");
+  }
   const user = this;
   const passwordHash = user.password
   // bcrypt.compare(plainText, hash)
