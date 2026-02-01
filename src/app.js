@@ -16,12 +16,26 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://rivaltrip.netlify.app/",
+      "https://rivaltrip.netlify.app",
+      "http://127.0.0.1:5173",
     ],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-    // credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE",  "OPTIONS"],
+    credentials: true,
   })
 )
+
+// // HANDLE PREFLIGHT EXPLICITLY
+// app.options(/.*/, cors());
+
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173",
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+//     allowedHeaders: ["Content-Type", "Authorization"],
+//   })
+// );
+
 
 
 // parsing

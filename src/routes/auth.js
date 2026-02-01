@@ -30,10 +30,17 @@ authRouter.post("/signup", async (req, res) => {
     // Create JWT token
     const token = await savedUser.generateAuthToken();
 
-    res.cookie("token", token, {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
-      // httpOnly: true,
+    // res.cookie("token", token, {
+    //   expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
+    //   // httpOnly: true,
+    // });
+
+      res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax", // REQUIRED for localhost
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
+
 
     // res.cookie("token", token, {
     //   httpOnly: true,
@@ -91,10 +98,18 @@ authRouter.post("/login", async (req, res) => {
     //  Set cookie
     // Add the token to cookie and send the response back to the user
     // res.cookie("token", token);
+    // res.cookie("token", token, {
+    //   expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
+    //   // httpOnly: true,
+    // });
+
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000), // 1 day
-      // httpOnly: true,
+      httpOnly: true,
+      sameSite: "lax", // REQUIRED for localhost
+      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
+
+    
     // res.cookie("token", token, {
     //   httpOnly: true,
     //   secure: true, // REQUIRED for HTTPS (Render)
@@ -119,6 +134,7 @@ authRouter.post("/logout", async(req,res) => {
     expires: new Date(Date.now()),
     httpOnly: true
   })
+  
   res.json({message: "Logout successfully"})
   }catch(err){
     res.status(500).json({ message: "Internal Server Error: " + err.message });
