@@ -23,6 +23,36 @@ popularDestinationsRouter.get("/popular-destinations", async (req, res) => {
   }
 });
 
+// Create popular destination 
+popularDestinationsRouter.post("/admin/countries", adminAuth, async (req, res) => {
+  try{
+
+    const {slug, countryName, city, img, headerImg, discount, price, sections } = req.body
+
+    if(!slug || !countryName || !city){
+      return res.status(400).json({message: "slug, countryName amd city are required"})
+    }
+    
+    const popularDestination = await PopularDestination.create({
+      slug,
+      countryName,
+      city,
+       img,
+      headerImg,
+      discount,
+      price,
+      sections
+    });
+    res.status(201).json({message: "Created popular destination", popularDestination});
+  } catch(err){
+    if (err.code === 11000) {
+    return res.status(409).json({
+      message: "Destination with this slug already exists"
+    });
+  }
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
 
 
 module.exports = popularDestinationsRouter;
