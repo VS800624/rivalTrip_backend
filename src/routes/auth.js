@@ -4,6 +4,7 @@ const authRouter = express.Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const validator = require("validator");
+const adminAuth = require("../middleware/auth");
 
 authRouter.post("/signup", async (req, res) => {
   try {
@@ -140,5 +141,19 @@ authRouter.post("/logout", async(req,res) => {
     res.status(500).json({ message: "Internal Server Error: " + err.message });
   }
 })
+
+authRouter.put("/make-admin/:id", adminAuth, async(req, res) => {
+  try{
+    const user = await User.findOneAndUpdate(
+      req.params.id, 
+      {role: "admin"},
+      {new: true} 
+  );
+  res.json({message: "User promoted to admin", user})
+  } catch(err){
+    res.status(500).json({message: err.message})
+  }
+})
+
 
 module.exports = authRouter;

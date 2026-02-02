@@ -1,5 +1,6 @@
 const express = require("express");
 const PopularDestination = require("../models/popularDestination");
+const adminAuth = require("../middleware/auth");
 const popularDestinationsRouter = express.Router();
 
 // Get Popular Destinations
