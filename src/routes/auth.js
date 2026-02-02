@@ -142,18 +142,4 @@ authRouter.post("/logout", async(req,res) => {
   }
 })
 
-authRouter.put("/make-admin/:id", adminAuth, async(req, res) => {
-  try{
-    const user = await User.findOneAndUpdate(
-      req.params.id, 
-      {role: "admin"},
-      {new: true} 
-  );
-  res.json({message: "User promoted to admin", user})
-  } catch(err){
-    res.status(500).json({message: err.message})
-  }
-})
-
-
 module.exports = authRouter;

@@ -9,6 +9,7 @@ const businessClassCountriesRouter = require("./routes/businessClassCountires")
 const destinationsSlugRouter = require("./routes/getDestinationsBySlug")
 const cookieParser = require("cookie-parser")
 const authRouter = require("./routes/auth")
+const adminRouter = require("./routes/admin")
 
 // Setup cors
 app.use(
@@ -48,6 +49,7 @@ app.use("/api", bestDealsCountriesRouter)
 app.use("/api", businessClassCountriesRouter)
 app.use("/api", destinationsSlugRouter)
 app.use("/api", authRouter)
+app.use("/api", adminRouter)
 
 connectDB()
   .then(() => {
