@@ -39,7 +39,9 @@ const bestDealsCountriesSchema = new mongoose.Schema({
     img: String,
     headerImg: String,
     discount: String,
+    discountValue: Number,
     price: String,
+    priceValue: Number,
 
 
     sections: [sectionSchema],
