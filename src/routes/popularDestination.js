@@ -24,7 +24,7 @@ popularDestinationsRouter.get("/popular-destinations", async (req, res) => {
 });
 
 // Create popular destination 
-popularDestinationsRouter.post("/admin/countries", adminAuth, async (req, res) => {
+popularDestinationsRouter.post("/admin/popular-destinations", adminAuth, async (req, res) => {
   try{
 
     const {slug, countryName, city, img, headerImg, discount, price, sections } = req.body
@@ -37,8 +37,8 @@ popularDestinationsRouter.post("/admin/countries", adminAuth, async (req, res) =
       slug,
       countryName,
       city,
-       img,
-      headerImg,
+      img,
+      headerImg, 
       discount,
       price,
       sections
