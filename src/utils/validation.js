@@ -20,6 +20,5 @@ const validateSignUpData = (req) => {
   }
 }
 
-// const validateUpdatePopularDestination
 
 module.exports = {validateSignUpData,}
