@@ -3,7 +3,7 @@ const PopularDestination = require("../models/popularDestination");
 const adminAuth = require("../middleware/auth");
 const popularDestinationsRouter = express.Router();
 
-// Get Popular Destinations
+// Get Popular Destinations public
 popularDestinationsRouter.get("/popular-destinations", async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 0 
@@ -23,8 +23,18 @@ popularDestinationsRouter.get("/popular-destinations", async (req, res) => {
   }
 });
 
+// Get all popular destination (Admin)
+popularDestinationsRouter.get("/admin/popular-destination", adminAuth, async(req,res) => {
+  try{
+    const popularDestination = await PopularDestination.find({}).sort({createdAt: -1})
+    res.json({message: "Fetched popular countries successfully", count: popularDestination.length, popularDestination})
+  } catch(err){
+    res.status(500).json({ success: false, message: err.message });
+  }
+})
+
 // Create popular destination 
-popularDestinationsRouter.post("/admin/popular-destinations", adminAuth, async (req, res) => {
+popularDestinationsRouter.put("/admin/popular-destinations", adminAuth, async (req, res) => {
   try{
 
     let {slug, countryName, city, img, headerImg, discount, discountValue, price, priceValue, sections } = req.body
@@ -76,8 +86,6 @@ popularDestinationsRouter.post("/admin/popular-destinations", adminAuth, async (
       priceValue,
       sections
     });
-
-
     
     res.status(201).json({message: "Created popular destination", popularDestination});
   } catch(err){
