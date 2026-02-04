@@ -1,6 +1,7 @@
 const express = require("express");
 const PopularDestination = require("../models/popularDestination");
 const adminAuth = require("../middleware/auth");
+const { validateAndFormatPopularDestination } = require("../utils/validation");
 const popularDestinationsRouter = express.Router();
 
 // Get Popular Destinations public
@@ -37,55 +38,11 @@ popularDestinationsRouter.get("/admin/popular-destination", adminAuth, async(req
 popularDestinationsRouter.put("/admin/popular-destinations", adminAuth, async (req, res) => {
   try{
 
-    let {slug, countryName, city, img, headerImg, discount, discountValue, price, priceValue, sections } = req.body
+    const validatedData = validateAndFormatPopularDestination(req.body, true);  //create = true
 
-    if(!slug || !countryName || !city){
-      return res.status(400).json({message: "slug, countryName amd city are required"})
-    }
+    const popularDestination =
+    await PopularDestination.create(validatedData);
 
-      // Normalize slug
-      slug = slug.trim().toLowerCase();
-      if (price) price = price.trim();
-      if (discount) discount = discount.trim();
-
-      // Basic validations
-      if (priceValue && isNaN(priceValue)) {
-        return res.status(400).json({
-          success: false,
-          message: "priceValue must be a number"
-        });
-      }
-
-      if (discountValue && isNaN(discountValue)) {
-        return res.status(400).json({
-          success: false,
-          message: "discountValue must be a number"
-        });
-      }
-      
-      if (sections && !Array.isArray(sections)) {
-        return res.status(400).json({
-        success: false,
-        message: "sections must be an array"
-        });
-      }
-
-      // Convert to Number (recommended)
-      priceValue = priceValue !== undefined ? Number(priceValue) : undefined;
-      discountValue = discountValue !== undefined ? Number(discountValue) : undefined;
-    
-    const popularDestination = await PopularDestination.create({
-      slug,
-      countryName,
-      city,
-      img,
-      headerImg, 
-      discount,
-      discountValue,
-      price,
-      priceValue,
-      sections
-    });
 
     // or 
     //     const dest = new PopularDestination({
@@ -121,65 +78,32 @@ popularDestinationsRouter.put("/admin/popular-destinations", adminAuth, async (r
 popularDestinationsRouter.patch("/admin/popular-destination/:id", adminAuth, async(req,res) => {
   try{
     // const loggedInAdmin = req.user
-   const allowedFields = [
-    "slug",
-    "countryName",
-    "city",
-    "img",
-    "headerImg",
-    "discount",
-    "discountValue",
-    "price",
-    "priceValue",
-    "sections"
-  ];
+   
+      const allowedFields = [
+        "slug",
+        "countryName",
+        "city",
+        "img",
+        "headerImg",
+        "discount",
+        "discountValue",
+        "price",
+        "priceValue",
+        "sections"
+      ];
 
-  const updates = {};
+      const updates = {};
 
-  allowedFields.forEach((field) => {
-    if (req.body[field] !== undefined) {
-      updates[field] = req.body[field];
-    }
-  });
-
-    // Normalize slug
-    if (updates.slug) {
-      updates.slug = updates.slug.trim().toLowerCase();
-    }
-
-  
-    // Validate numbers
-    if (updates.priceValue && isNaN(updates.priceValue)) {
-      return res.status(400).json({
-        success: false,
-        message: "priceValue must be a number"
+      allowedFields.forEach((field) => {
+        if (req.body[field] !== undefined) {
+          updates[field] = req.body[field];
+        }
       });
-    }
 
-    if (updates.discountValue && isNaN(updates.discountValue)) {
-      return res.status(400).json({
-        success: false,
-        message: "discountValue must be a number"
-      });
-    }
+      const validatedUpdates =
+        validateAndFormatPopularDestination(updates);
 
-    // Convert to Number
-    if (updates.priceValue !== undefined) {
-      updates.priceValue = Number(updates.priceValue);
-    }
-
-    if (updates.discountValue !== undefined) {
-      updates.discountValue = Number(updates.discountValue);
-    }
-
-    if (sections && !Array.isArray(sections)) {
-        return res.status(400).json({
-        success: false,
-        message: "sections must be an array"
-        });
-      }
-
-    const updated = await PopularDestination.findByIdAndUpdate(req.params.id, updates,{ new: true, runValidators: true})
+    const updated = await PopularDestination.findByIdAndUpdate(req.params.id, validatedUpdates,{ new: true, runValidators: true})
 
     if(!updated){
       return res.status(404).json({message: "Popular destination not found"})

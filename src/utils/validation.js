@@ -21,4 +21,46 @@ const validateSignUpData = (req) => {
 }
 
 
-module.exports = {validateSignUpData,}
+export const validateAndFormatPopularDestination = (data, isCreate = false) => {
+  const updates = { ...data };
+
+  // Required fields (only for CREATE)
+  if (isCreate) {
+    if (!updates.slug || !updates.countryName || !updates.city) {
+      throw new Error("slug, countryName and city are required");
+    }
+  }
+
+  // Normalize slug
+  if (updates.slug) {
+    updates.slug = updates.slug.trim().toLowerCase();
+  }
+
+  // Validate numbers
+  if (updates.priceValue !== undefined && isNaN(updates.priceValue)) {
+    throw new Error("priceValue must be a number");
+  }
+
+  if (updates.discountValue !== undefined && isNaN(updates.discountValue)) {
+    throw new Error("discountValue must be a number");
+  }
+
+  // Convert to Number
+  if (updates.priceValue !== undefined) {
+    updates.priceValue = Number(updates.priceValue);
+  }
+
+  if (updates.discountValue !== undefined) {
+    updates.discountValue = Number(updates.discountValue);
+  }
+
+  // Validate sections
+  if (updates.sections && !Array.isArray(updates.sections)) {
+    throw new Error("sections must be an array");
+  }
+
+  return updates;
+};
+
+
+module.exports = {validateSignUpData, validateAndFormatPopularDestination}
