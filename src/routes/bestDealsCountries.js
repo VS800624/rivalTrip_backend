@@ -35,4 +35,22 @@ bestDealsCountriesRouter.get("/admin/best-deals", adminAuth, async(req,res) => {
   }
 })
 
+//Create best deals countries
+bestDealsCountriesRouter.put("/admin/best-deals", adminAuth, async(req,res) => {
+  try{
+
+    const validatedData = validateAndFormatDestination(req.body, true); //create = true
+
+    const bestDealsCountry = await BestDealsCountries.create(validatedData)
+
+    res.json({message: "Created best deal Country", bestDealsCountry})
+    
+  }catch(err){
+    if(err.code === 11000 ){
+      return res.status(409).json({message: "Destination with this slug already exists"})
+    }
+    res.status(500).json({ success: false, message: err.message})
+  }
+})
+
 module.exports = bestDealsCountriesRouter;
