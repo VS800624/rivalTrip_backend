@@ -22,7 +22,7 @@ const validateSignUpData = (req) => {
 }
 
 
- const validateAndFormatPopularDestination = (data, isCreate = false) => {
+ const validateAndFormatDestination = (data, isCreate = false) => {
   const updates = { ...data };
 
   // Required fields (only for CREATE)
@@ -64,4 +64,4 @@ const validateSignUpData = (req) => {
 };
 
 
-module.exports = {validateSignUpData, validateAndFormatPopularDestination}
+module.exports = {validateSignUpData, validateAndFormatDestination}

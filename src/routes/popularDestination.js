@@ -1,7 +1,7 @@
 const express = require("express");
 const PopularDestination = require("../models/popularDestination");
 const adminAuth = require("../middleware/auth");
-const { validateAndFormatPopularDestination } = require("../utils/validation");
+const {  validateAndFormatDestination } = require("../utils/validation");
 const { default: mongoose } = require("mongoose");
 const popularDestinationsRouter = express.Router();
 
@@ -51,7 +51,7 @@ popularDestinationsRouter.put(
   adminAuth,
   async (req, res) => {
     try {
-      const validatedData = validateAndFormatPopularDestination(req.body, true); //create = true
+      const validatedData = validateAndFormatDestination(req.body, true); //create = true
 
       const popularDestination = await PopularDestination.create(validatedData);
 
@@ -119,7 +119,7 @@ popularDestinationsRouter.patch(
         }
       });
 
-      const validatedUpdates = validateAndFormatPopularDestination(updates);
+      const validatedUpdates = validateAndFormatDestination(updates);
 
       const updated = await PopularDestination.findByIdAndUpdate(
         req.params.id,
