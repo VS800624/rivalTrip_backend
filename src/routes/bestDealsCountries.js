@@ -2,6 +2,7 @@ const express = require("express");
 const BestDealsCountries = require("../models/bestDealsCountries");
 const adminAuth = require("../middleware/auth");
 const { validateAndFormatDestination } = require("../utils/validation");
+const { default: mongoose } = require("mongoose");
 const bestDealsCountriesRouter = express.Router();
 
 // Get best deals countries
@@ -44,7 +45,7 @@ bestDealsCountriesRouter.put("/admin/best-deals", adminAuth, async(req,res) => {
 
     const bestDealsCountry = await BestDealsCountries.create(validatedData)
 
-    res.json({message: "Created best deal Country", bestDealsCountry})
+    res.json({message: "Created best deal country successfully", bestDealsCountry})
     
   }catch(err){
     if(err.code === 11000 ){
@@ -119,7 +120,7 @@ bestDealsCountriesRouter.delete("/admin/best-deals/:id", adminAuth, async(req,re
       return res.status(404).json({message: "Best deals country not found"})
      }
 
-     res.json({message: "Deleted country successfully", deletedBestDealsCountry})
+     res.json({message: "Deleted best deals country successfully", deletedBestDealsCountry})
     
   }catch(err){
       res.status(500).json({success: false, message: err.message})

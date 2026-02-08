@@ -47,7 +47,7 @@ popularDestinationsRouter.get(
 
 // Create popular destination
 popularDestinationsRouter.put(
-  "/admin/popular-destinations",
+  "/admin/popular-destination",
   adminAuth,
   async (req, res) => {
     try {
