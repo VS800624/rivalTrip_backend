@@ -105,5 +105,25 @@ bestDealsCountriesRouter.patch("/admin/best-deals/:id", adminAuth, async(req,res
   }
 })
 
+// Delete best deals
+bestDealsCountriesRouter.delete("/admin/best-deals/:id", adminAuth, async(req,res) => {
+  try{
+
+     if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+          return res.status(400).json({message: "Invalid ID"})
+      }
+    
+     const deletedBestDealsCountry = await BestDealsCountries.findByIdAndDelete(req.params.id) 
+
+     if(!deletedBestDealsCountry){
+      return res.status(404).json({message: "Best deals country not found"})
+     }
+
+     res.json({message: "Deleted country successfully", deletedBestDealsCountry})
+    
+  }catch(err){
+      res.status(500).json({success: false, message: err.message})
+  }
+})
 
 module.exports = bestDealsCountriesRouter;
