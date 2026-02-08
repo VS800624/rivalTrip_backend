@@ -1,6 +1,7 @@
 const express = require("express");
 const BestDealsCountries = require("../models/bestDealsCountries");
 const adminAuth = require("../middleware/auth");
+const { validateAndFormatDestination } = require("../utils/validation");
 const bestDealsCountriesRouter = express.Router();
 
 // Get best deals countries
@@ -52,5 +53,57 @@ bestDealsCountriesRouter.put("/admin/best-deals", adminAuth, async(req,res) => {
     res.status(500).json({ success: false, message: err.message})
   }
 })
+
+// Update best deals countries
+bestDealsCountriesRouter.patch("/admin/best-deals/:id", adminAuth, async(req,res) => {
+  try{
+
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+          return res.status(400).json({message: "Invalid ID"})
+        }
+
+    const allowedFields = [
+        "slug",
+        "countryName",
+        "city",
+        "img",
+        "headerImg",
+        "discount",
+        "discountValue",
+        "price",
+        "priceValue",
+        "sections",
+      ];
+
+      const updates = {}
+
+      allowedFields.forEach((fields) => {
+        if (req.body[fields] !== undefined){
+          updates[fields] = req.body[fields]
+        }
+      })
+    
+    const validatedUpdates = validateAndFormatDestination(updates) 
+
+    const updated = await BestDealsCountries.findOneAndUpdate(
+      req.body.params,
+      validatedUpdates,
+      { new: true, runValidators: true },
+    )
+    
+    if(!updated){
+      return res.status(404).json({message: "Best deals country not found"})
+    }
+
+    res.json({message: "Updated best deals country successfully", updated})
+    
+  }catch(err){
+    if(err.code === 11000 ){
+      return res.status(409).json({message: "Destination with this slug already exists"})
+    }
+    res.status(500).json({ success: false, message: err.message})
+  }
+})
+
 
 module.exports = bestDealsCountriesRouter;
