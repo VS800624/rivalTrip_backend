@@ -2,6 +2,7 @@ const express = require("express");
 const BusinessClassCountries = require("../models/businessClassCountries");
 const adminAuth = require("../middleware/auth");
 const { validateAndFormatDestination } = require("../utils/validation");
+const { default: mongoose } = require("mongoose");
 const businessClassCountriesRouter = express.Router();
 
 // get business class countries
@@ -63,5 +64,57 @@ businessClassCountriesRouter.put("/admin/business-class", adminAuth, async(req,r
     res.status(500).json({success:false, message: err.message})
   }
 })
+
+// Update business class country
+businessClassCountriesRouter.patch("/admin/business-class/:id", adminAuth, async(req,res) => {
+  try{
+    
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+          return res.status(400).json({message: "Invalid ID"})
+    }
+
+    const allowedFields = [
+        "slug",
+        "countryName",
+        "city",
+        "img",
+        "headerImg",
+        "discount",
+        "discountValue",
+        "price",
+        "priceValue",
+        "sections",
+      ];
+
+      const updates = {}
+
+      allowedFields.forEach((fields) => {
+        if(req.body[fields] != undefined){
+          updates[fields] = req.body[fields]
+        }
+      })
+
+      const validateUpdates = validateAndFormatDestination(updates)
+
+      const updated = await BusinessClassCountries.findByIdAndUpdate(
+        req.body.params,
+        validatedUpdates,
+      { new: true, runValidators: true },
+      )
+
+       if(!updated){
+      return res.status(404).json({message: "Best deals country not found"})
+    }
+
+    res.json({message: "Updated business class country successfully", updated})
+    
+  }catch(err){
+    if(err.code === 11000 ){
+      return res.status(409).json({message: "Destination with this slug already exists"})
+    }
+    res.status(500).json({message: err.message})
+  }
+})
+
 
 module.exports = businessClassCountriesRouter;
