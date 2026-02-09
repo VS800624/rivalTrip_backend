@@ -1,6 +1,7 @@
 const express = require("express");
 const BusinessClassCountries = require("../models/businessClassCountries");
 const adminAuth = require("../middleware/auth");
+const { validateAndFormatDestination } = require("../utils/validation");
 const businessClassCountriesRouter = express.Router();
 
 // get business class countries
@@ -22,7 +23,7 @@ businessClassCountriesRouter.get("/business-class", async (req, res) => {
   }
 });
 
-// get all business class countries admin
+// Get all business class countries admin
 businessClassCountriesRouter.get(
   "/admin/business-class",
   adminAuth,
@@ -43,5 +44,24 @@ businessClassCountriesRouter.get(
     }
   },
 );
+
+
+// Create business class country
+businessClassCountriesRouter.put("/admin/business-class", adminAuth, async(req,res) => {
+  try{
+
+    const validatedData = validateAndFormatDestination(req.data, true)
+
+    const businessClassCountry = await BusinessClassCountries.create(validatedData)
+
+    res.json({message: "Created business class country successfully", businessClassCountry})
+    
+  }catch(err){
+     if(err.code === 11000 ){
+      return res.status(409).json({message: "Destination with this slug already exists"})
+    }
+    res.status(500).json({success:false, message: err.message})
+  }
+})
 
 module.exports = businessClassCountriesRouter;
