@@ -18,7 +18,7 @@ const adminAuth = async(req, res, next) => {
       return res.status(401).json({message: "Admin access only"})
     }
 
-    req.admin = user
+    req.admin = admin
     next()
   
   }catch(err){

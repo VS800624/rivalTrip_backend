@@ -121,7 +121,7 @@ businessClassCountriesRouter.delete("/admin/business-class/:id", adminAuth, asyn
   try{
 
     if(!mongoose.Types.ObjectId.isValid(req.body.id)){
-      return res.status(404).json({message: "Invalid Id"})
+      return res.status(400).json({message: "Invalid Id"})
     }
 
     const deletedBusinessClass = await BusinessClassCountries.findByIdAndDelete(req.body.id)
