@@ -11,14 +11,14 @@ const adminAuth = async(req, res, next) => {
 
      // validate the token (secret key) and decode and return the payload (the data (_id) you originally stored in the token)
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
-    const user = await User.findById({ _id: decoded._id })
+    const user = await User.findById({ _id: decoded._id }) .select("+password");
 
     // Checking if the user is admin or not
     if (!user || user.role !== "admin"){
       return res.status(401).json({message: "Admin access only"})
     }
 
-    req.admin = admin
+    req.admin = user
     next()
   
   }catch(err){

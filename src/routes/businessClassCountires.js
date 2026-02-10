@@ -30,9 +30,7 @@ businessClassCountriesRouter.get(
   adminAuth,
   async (req, res) => {
     try {
-      const businessClassCountries = (
-        await BusinessClassCountries.find({})
-      ).sort({ createdAt: -1 });
+      const businessClassCountries = await BusinessClassCountries.find({}).sort({ createdAt: -1 });
 
       res.json({
         success: true,

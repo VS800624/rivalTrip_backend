@@ -40,7 +40,7 @@ adminRouter.put("/remove-admin/:id", adminAuth, async(req,res) => {
 })
 
 
-adminRouter.patch("/admin/password", adminAuth, async(req,res) => {
+adminRouter.post("/admin/password", adminAuth, async(req,res) => {
   try{
     const admin = req.admin
     const {oldPassword, newPassword} = req.body
