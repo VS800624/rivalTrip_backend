@@ -94,7 +94,7 @@ businessClassCountriesRouter.patch("/admin/business-class/:id", adminAuth, async
         }
       })
 
-      const validateUpdates = validateAndFormatDestination(updates)
+      const validatedUpdates = validateAndFormatDestination(updates)
 
       const updated = await BusinessClassCountries.findByIdAndUpdate(
         req.body.params,
@@ -116,5 +116,25 @@ businessClassCountriesRouter.patch("/admin/business-class/:id", adminAuth, async
   }
 })
 
+// Delete business class
+businessClassCountriesRouter.delete("/admin/business-class/:id", adminAuth, async(req,res) => {
+  try{
+
+    if(!mongoose.Types.ObjectId.isValid(req.body.id)){
+      return res.status(404).json({message: "Invalid Id"})
+    }
+
+    const deletedBusinessClass = await BusinessClassCountries.findByIdAndDelete(req.body.id)
+
+    if(!deletedBusinessClass){
+      return res.status(404).json({message: "Business class country not found"})
+    }
+
+    res.json({message: "Deleted business class country successfully"}, deletedBusinessClass)
+
+  }catch(err){
+    res.status(500).json({message: err.message})
+  }
+})
 
 module.exports = businessClassCountriesRouter;
