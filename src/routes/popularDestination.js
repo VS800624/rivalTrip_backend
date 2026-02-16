@@ -1,7 +1,7 @@
 const express = require("express");
 const PopularDestination = require("../models/popularDestination");
 const adminAuth = require("../middleware/auth");
-const {  validateAndFormatDestination } = require("../utils/validation");
+const { validateAndFormatDestination } = require("../utils/validation");
 const { default: mongoose } = require("mongoose");
 const popularDestinationsRouter = express.Router();
 
@@ -28,7 +28,7 @@ popularDestinationsRouter.get("/popular-destinations", async (req, res) => {
 // Get all popular destination (Admin)
 popularDestinationsRouter.get(
   "/admin/popular-destinations",
-  adminAuth,
+  // adminAuth,
   async (req, res) => {
     try {
       const popularDestination = await PopularDestination.find({}).sort({
@@ -45,10 +45,36 @@ popularDestinationsRouter.get(
   },
 );
 
+// Get destination by id
+popularDestinationsRouter.get("/admin/popular-destination/:id", 
+  // adminAuth,
+  async(req,res) => {
+    try{
+      // Check if ID is valid
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID" });
+      }
+
+       // Find destination
+      const popularDestination = await PopularDestination.findById(req.params.id)
+
+      // If not found
+      if(!popularDestination){
+        return res.status(404).json({message: "Popular destination not found"})
+      }
+
+      res.json({message: "Fetched popular destination successfully", popularDestination})
+      
+    } catch(err){
+      res.status(500).json({ success: false ,message: err.message})
+    }
+  }
+)
+
 // Create popular destination
 popularDestinationsRouter.put(
   "/admin/popular-destination",
-  adminAuth,
+  // adminAuth,
   async (req, res) => {
     try {
       const validatedData = validateAndFormatDestination(req.body, true); //create = true
@@ -63,9 +89,7 @@ popularDestinationsRouter.put(
       //   img,
       //   headerImg,
       //   discount,
-      //   discountValue,
       //   price,
-      //   priceValue,
       //   sections
       // });
 
@@ -94,9 +118,9 @@ popularDestinationsRouter.patch(
     try {
       // const loggedInAdmin = req.user
 
-       if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-      return res.status(400).json({message: "Invalid ID"})
-    }
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID" });
+      }
 
       const allowedFields = [
         "slug",
@@ -105,9 +129,7 @@ popularDestinationsRouter.patch(
         "img",
         "headerImg",
         "discount",
-        "discountValue",
         "price",
-        "priceValue",
         "sections",
       ];
 
@@ -144,30 +166,33 @@ popularDestinationsRouter.patch(
 );
 
 // Delete popular destination
-popularDestinationsRouter.delete("/admin/popular-destination/:id", adminAuth, async (req, res) => {
-  try {
+popularDestinationsRouter.delete(
+  "/admin/popular-destination/:id",
+  // adminAuth,
+  async (req, res) => {
+    try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid ID" });
+      }
 
-    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-      return res.status(400).json({message: "Invalid ID"})
-    }
-    
-    const deletedDestination = await PopularDestination.findByIdAndDelete(
-      req.params.id,
-    );
+      const deletedDestination = await PopularDestination.findByIdAndDelete(
+        req.params.id,
+      );
 
-    if (!deletedDestination) {
-      return res.status(404).json({
-        message: "Destination not found",
+      if (!deletedDestination) {
+        return res.status(404).json({
+          message: "Destination not found",
+        });
+      }
+
+      res.json({
+        message: "Popular destination deleted successfully",
+        deletedDestination,
       });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
     }
-
-    res.json({
-      message: "Popular destination deleted successfully",
-      deletedDestination,
-    });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+  },
+);
 
 module.exports = popularDestinationsRouter;

@@ -4,6 +4,10 @@ const User = require("../models/user");
 const adminRouter = express.Router()
 const bcrypt = require("bcrypt")
 
+adminRouter.get("/me", adminAuth, async(req,res) => {
+  res.json({success: true, user: req.admin})
+})
+
 adminRouter.put("/make-admin/:id", adminAuth, async(req, res) => {
   try{
 

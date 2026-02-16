@@ -76,12 +76,12 @@ authRouter.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Email is not valid" });
     }
 
-    if (!validator.isStrongPassword(password)) {
-      return res.status(400).json({ message: "Password is not valid" });
-    }
+    if (!emailId || !password) {
+      return res.status(400).json({ message: "Email and password required" });
+      }
 
     // Find user in database:
-    const user = await User.findOne({ emailId: emailId }).select("+password");;
+    const user = await User.findOne({ emailId: emailId }).select("+password");
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });
@@ -120,8 +120,10 @@ authRouter.post("/login", async (req, res) => {
 
     // const userResponse = user.toObject()
     // delete userResponse.password
+
     res.json({ message: "Logged in successfully!!!", user });
   } catch (err) {
+    console.error("LOGIN ERROR:", err);
     if (err.name === "ValidationError") {
       return res.status(400).json({ message: "ERROR: " + err.message });
     }
@@ -141,5 +143,7 @@ authRouter.post("/logout", async(req,res) => {
     res.status(500).json({ message: "Internal Server Error: " + err.message });
   }
 })
+
+
 
 module.exports = authRouter;

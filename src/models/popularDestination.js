@@ -44,10 +44,10 @@ const popularDestinationSchema = new mongoose.Schema(
     },
     img: String,
     headerImg: String,
-    discount: String,
-    discountValue: Number,
-    price: String,
-    priceValue: Number,
+    // discount: String,
+    // discountValue: Number,
+    // price: String,
+    // priceValue: Number,
 
 
     sections: [sectionSchema],
