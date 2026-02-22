@@ -64,7 +64,7 @@ popularDestinationsRouter.get("/admin/popular-destination/:id",
       }
 
       res.json({message: "Fetched popular destination successfully", popularDestination})
-      
+
     } catch(err){
       res.status(500).json({ success: false ,message: err.message})
     }
@@ -111,9 +111,9 @@ popularDestinationsRouter.put(
 );
 
 // Update popular destination
-popularDestinationsRouter.patch(
+popularDestinationsRouter.put(
   "/admin/popular-destination/:id",
-  adminAuth,
+  // adminAuth,
   async (req, res) => {
     try {
       // const loggedInAdmin = req.user

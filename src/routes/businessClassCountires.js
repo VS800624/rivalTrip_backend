@@ -44,6 +44,31 @@ businessClassCountriesRouter.get(
   },
 );
 
+// Get destination by id
+businessClassCountriesRouter.get("/admin/business-class/:id",
+  // adminAuth,
+  async(req,res) => {
+    try{
+
+      // Check if id is valid
+      if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        return req.status(400).json({message:"Invalid ID"})
+      }
+      
+      // Find Id
+      const businessClassCountry = await BusinessClassCountries.findById(req.body.params)
+
+      if (!businessClassCountry){
+        return req.status(404).json({message:"Business class country not found"})
+      }
+
+      res.json({message:"Fetched business class country successfully", businessClassCountry})
+      
+    } catch(err){
+      req.res(500).json({success:false, message: err.message})
+    }
+  }
+)
 
 // Create business class country
 businessClassCountriesRouter.put("/admin/business-class", adminAuth, async(req,res) => {
