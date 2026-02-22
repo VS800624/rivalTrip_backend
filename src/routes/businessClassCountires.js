@@ -44,7 +44,7 @@ businessClassCountriesRouter.get(
   },
 );
 
-// Get destination by id
+// Get destination by Id (Admin)
 businessClassCountriesRouter.get("/admin/business-class/:id",
   // adminAuth,
   async(req,res) => {
@@ -55,7 +55,7 @@ businessClassCountriesRouter.get("/admin/business-class/:id",
         return req.status(400).json({message:"Invalid ID"})
       }
       
-      // Find Id
+      // Find country
       const businessClassCountry = await BusinessClassCountries.findById(req.body.params)
 
       if (!businessClassCountry){

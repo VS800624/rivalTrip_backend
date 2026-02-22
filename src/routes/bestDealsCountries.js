@@ -37,6 +37,30 @@ bestDealsCountriesRouter.get("/admin/best-deals", adminAuth, async(req,res) => {
   }
 })
 
+// Get best deals countries by id (Admin)
+bestDealsCountriesRouter.get("/admin/best-deals/:id",
+  // adminAuth,
+  async(req,res) => {
+    try{
+      // Check if id is valid
+      if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        return req.status(400).json({message: "Invalid Id"})
+      }
+      // Find country
+      const bestDealsCountry = await BestDealsCountries.findById(req.body.params)
+
+      if(!bestDealsCountry){
+        return res.status(404).json({message: "Best deals country not found"})
+      }
+      
+      res.json({message:"Fetched best deals country successfully", bestDealsCountry})
+      
+    } catch(err){
+      res.status(500).json({success:false , message: err.message})
+    }
+  }
+)
+
 //Create best deals countries
 bestDealsCountriesRouter.put("/admin/best-deals", adminAuth, async(req,res) => {
   try{
