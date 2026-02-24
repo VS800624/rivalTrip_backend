@@ -72,7 +72,7 @@ popularDestinationsRouter.get("/admin/popular-destination/:id",
 )
 
 // Create popular destination
-popularDestinationsRouter.put(
+popularDestinationsRouter.post(
   "/admin/popular-destination",
   // adminAuth,
   async (req, res) => {

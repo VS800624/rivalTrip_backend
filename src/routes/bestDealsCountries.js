@@ -80,7 +80,7 @@ bestDealsCountriesRouter.get(
 );
 
 //Create best deals countries
-bestDealsCountriesRouter.put(
+bestDealsCountriesRouter.post(
   "/admin/best-deals",
   // adminAuth,
   async (req, res) => {
