@@ -137,7 +137,7 @@ bestDealsCountriesRouter.put(
 
       const validatedUpdates = validateAndFormatDestination(updates);
 
-      const updated = await BestDealsCountries.findOneAndUpdate(
+      const updated = await BestDealsCountries.findByIdAndUpdate(
         req.params.id,
         validatedUpdates,
         { new: true, runValidators: true },
