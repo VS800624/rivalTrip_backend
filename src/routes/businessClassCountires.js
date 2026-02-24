@@ -52,11 +52,11 @@ businessClassCountriesRouter.get("/admin/business-class/:id",
 
       // Check if id is valid
       if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-        return req.status(400).json({message:"Invalid ID"})
+        return res.status(400).json({message:"Invalid ID"})
       }
       
       // Find country
-      const businessClassCountry = await BusinessClassCountries.findById(req.body.params)
+      const businessClassCountry = await BusinessClassCountries.findById(req.params.is)
 
       if (!businessClassCountry){
         return req.status(404).json({message:"Business class country not found"})
