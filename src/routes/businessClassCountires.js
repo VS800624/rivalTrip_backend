@@ -56,7 +56,7 @@ businessClassCountriesRouter.get("/admin/business-class/:id",
       }
       
       // Find country
-      const businessClassCountry = await BusinessClassCountries.findById(req.params.is)
+      const businessClassCountry = await BusinessClassCountries.findById(req.params.id)
 
       if (!businessClassCountry){
         return req.status(404).json({message:"Business class country not found"})
@@ -120,7 +120,7 @@ businessClassCountriesRouter.patch("/admin/business-class/:id", adminAuth, async
       const validatedUpdates = validateAndFormatDestination(updates)
 
       const updated = await BusinessClassCountries.findByIdAndUpdate(
-        req.body.params,
+        req.params.id,
         validatedUpdates,
       { new: true, runValidators: true },
       )
