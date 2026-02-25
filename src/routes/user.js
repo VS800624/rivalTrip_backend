@@ -146,27 +146,40 @@ userRouter.patch(
 );
 
 // Delete user
-userRouter.delete("/admin/user/:id",
+userRouter.delete(
+  "/admin/user/:id",
   // adminAuth,
-  async(req,res) => {
-    try{
-
-      if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-        return res.status(401).json({message: "Invalid Id"})
+  async (req, res) => {
+    try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: "Invalid Id" });
       }
 
-      const deletedUser = await User.findByIdAndDelete(req.params.id)
-
-      if(!deletedUser){
-        return res.status(404).json({message: "User not found"})
+      // Prevent self delete
+      if (req.user.id === req.params.id) {
+        return res
+          .status(400)
+          .json({ message: "You cannot delete your own account" });
       }
 
-      res.json({message: "Deleted user successfully", user: deletedUser})
-      
-    }catch(err){
-      res.status(500).json({message: err.message})
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
+
+      //or soft delete
+      // const deletedUser = await User.findByIdAndUpdate(
+      //   req.params.id,
+      //   { status: "inactive" },
+      //   { new: true }
+      // );
+
+      if (!deletedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      res.json({ message: "Deleted user successfully", user: deletedUser });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
     }
-  }
-)
+  },
+);
 
 module.exports = userRouter;
