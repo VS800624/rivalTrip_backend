@@ -100,4 +100,40 @@ userRouter.patch(
   },
 );
 
+// Change user status
+userRouter.patch( "/admin/user/:id/status",
+  // adminAuth,
+  async(req,res) => {
+    try{
+      
+      if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        return res.status(401).json({message: "Invalid Id"})
+      }
+
+      // if (!req.user) {
+      //   return res.status(401).json({ message: "Unauthorized" });
+      // }
+
+      // if (req.user.role === "admin") {
+      //   return res
+      //     .status(400)
+      //     .json({ message: "Admin status cannot be changed" });
+      // }
+
+      const {status} = req.body
+
+      const user = await User.findByIdAndUpdate(req.params.id, {status}, {new: true, runValidators: true})
+      
+      if(!user){
+        return res.status(404).json({message: "User not found"})
+      }
+      
+      res.json({message: "User status changed successfully", user})
+      
+    }catch(err){
+      res.status(500).json({message:err.message})
+    }
+  }
+)
+
 module.exports = userRouter;
