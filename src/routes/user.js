@@ -114,19 +114,26 @@ userRouter.patch( "/admin/user/:id/status",
       //   return res.status(401).json({ message: "Unauthorized" });
       // }
 
-      // if (req.user.role === "admin") {
-      //   return res
-      //     .status(400)
-      //     .json({ message: "Admin status cannot be changed" });
-      // }
 
       const {status} = req.body
 
-      const user = await User.findByIdAndUpdate(req.params.id, {status}, {new: true, runValidators: true})
-      
-      if(!user){
-        return res.status(404).json({message: "User not found"})
+      const user = await User.findById(req.params.id)
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
       }
+
+      // Prevent changing admin status
+      if (user.role === "admin") {
+        return res
+          .status(400)
+          .json({ message: "Admin status cannot be changed" });
+      }
+
+      // update status
+      user.status = status;
+      await user.save();
+      
       
       res.json({message: "User status changed successfully", user})
       
