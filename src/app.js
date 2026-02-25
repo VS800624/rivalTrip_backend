@@ -10,6 +10,7 @@ const destinationsSlugRouter = require("./routes/getDestinationsBySlug")
 const cookieParser = require("cookie-parser")
 const authRouter = require("./routes/auth")
 const adminRouter = require("./routes/admin")
+const userRouter = require("./routes/user")
 
 // Setup cors
 app.use(
@@ -50,6 +51,7 @@ app.use("/api", businessClassCountriesRouter)
 app.use("/api", destinationsSlugRouter)
 app.use("/api", authRouter)
 app.use("/api", adminRouter)
+app.use("/api", userRouter)
 
 connectDB()
   .then(() => {
