@@ -101,23 +101,27 @@ userRouter.patch(
 );
 
 // Change user status
-userRouter.patch( "/admin/user/:id/status",
+userRouter.patch(
+  "/admin/user/:id/status",
   // adminAuth,
-  async(req,res) => {
-    try{
-      
-      if(!mongoose.Types.ObjectId.isValid(req.params.id)){
-        return res.status(401).json({message: "Invalid Id"})
+  async (req, res) => {
+    try {
+      if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(401).json({ message: "Invalid Id" });
       }
 
       // if (!req.user) {
       //   return res.status(401).json({ message: "Unauthorized" });
       // }
 
+      const { status } = req.body;
 
-      const {status} = req.body
+      // Validate status
+      if (!["active", "blocked", "inactive"].includes(status)) {
+        return res.status(400).json({ message: "Invalid status" });
+      }
 
-      const user = await User.findById(req.params.id)
+      const user = await User.findById(req.params.id);
 
       if (!user) {
         return res.status(404).json({ message: "User not found" });
@@ -133,12 +137,34 @@ userRouter.patch( "/admin/user/:id/status",
       // update status
       user.status = status;
       await user.save();
-      
-      
-      res.json({message: "User status changed successfully", user})
+
+      res.json({ message: "User status changed successfully", user });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  },
+);
+
+// Delete user
+userRouter.delete("/admin/user/:id",
+  // adminAuth,
+  async(req,res) => {
+    try{
+
+      if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        return res.status(401).json({message: "Invalid Id"})
+      }
+
+      const deletedUser = await User.findByIdAndDelete(req.params.id)
+
+      if(!deletedUser){
+        return res.status(404).json({message: "User not found"})
+      }
+
+      res.json({message: "Deleted user successfully", user: deletedUser})
       
     }catch(err){
-      res.status(500).json({message:err.message})
+      res.status(500).json({message: err.message})
     }
   }
 )
