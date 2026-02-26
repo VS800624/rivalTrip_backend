@@ -28,7 +28,7 @@ popularDestinationsRouter.get("/popular-destinations", async (req, res) => {
 // Get all popular destination (Admin)
 popularDestinationsRouter.get(
   "/admin/popular-destinations",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       const popularDestination = await PopularDestination.find({}).sort({
@@ -47,7 +47,7 @@ popularDestinationsRouter.get(
 
 // Get destination by id
 popularDestinationsRouter.get("/admin/popular-destination/:id", 
-  // adminAuth,
+  adminAuth,
   async(req,res) => {
     try{
       // Check if ID is valid
@@ -74,7 +74,7 @@ popularDestinationsRouter.get("/admin/popular-destination/:id",
 // Create popular destination
 popularDestinationsRouter.post(
   "/admin/popular-destination",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       const validatedData = validateAndFormatDestination(req.body, true); //create = true
@@ -113,7 +113,7 @@ popularDestinationsRouter.post(
 // Update popular destination
 popularDestinationsRouter.put(
   "/admin/popular-destination/:id",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       // const loggedInAdmin = req.user
@@ -168,7 +168,7 @@ popularDestinationsRouter.put(
 // Delete popular destination
 popularDestinationsRouter.delete(
   "/admin/popular-destination/:id",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       if (!mongoose.Types.ObjectId.isValid(req.params.id)) {

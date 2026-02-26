@@ -27,7 +27,7 @@ bestDealsCountriesRouter.get("/best-deals", async (req, res) => {
 // Get best deals countries (Admin)
 bestDealsCountriesRouter.get(
   "/admin/best-deals",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       const bestDealsCountries = await BestDealsCountries.find({}).sort({
@@ -51,7 +51,7 @@ bestDealsCountriesRouter.get(
 // Get best deals countries by id (Admin)
 bestDealsCountriesRouter.get(
   "/admin/best-deals/:id",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       // Check if id is valid
@@ -82,7 +82,7 @@ bestDealsCountriesRouter.get(
 //Create best deals countries
 bestDealsCountriesRouter.post(
   "/admin/best-deals",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       const validatedData = validateAndFormatDestination(req.body, true); //create = true
@@ -107,7 +107,7 @@ bestDealsCountriesRouter.post(
 // Update best deals countries
 bestDealsCountriesRouter.put(
   "/admin/best-deals/:id",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -164,7 +164,7 @@ bestDealsCountriesRouter.put(
 // Delete best deals
 bestDealsCountriesRouter.delete(
   "/admin/best-deals/:id",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       if (!mongoose.Types.ObjectId.isValid(req.params.id)) {

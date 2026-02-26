@@ -27,7 +27,7 @@ businessClassCountriesRouter.get("/business-class", async (req, res) => {
 // Get all business class countries admin
 businessClassCountriesRouter.get(
   "/admin/business-class",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       const businessClassCountries = await BusinessClassCountries.find({}).sort({ createdAt: -1 });
@@ -46,7 +46,7 @@ businessClassCountriesRouter.get(
 
 // Get destination by Id (Admin)
 businessClassCountriesRouter.get("/admin/business-class/:id",
-  // adminAuth,
+  adminAuth,
   async(req,res) => {
     try{
 

@@ -7,7 +7,7 @@ const userRouter = express.Router();
 // get all users
 userRouter.get(
   "/admin/users",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       const users = await User.find({}).sort({
@@ -32,7 +32,7 @@ userRouter.get(
 // get user by id
 userRouter.get(
   "/admin/user/:id",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       // Check if ID is valid
@@ -57,7 +57,7 @@ userRouter.get(
 // Change user role
 userRouter.put(
   "/admin/user/:id/role",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       // Check if ID is valid
@@ -103,7 +103,7 @@ userRouter.put(
 // Change user status
 userRouter.put(
   "/admin/user/:id/status",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -148,15 +148,19 @@ userRouter.put(
 // Delete user
 userRouter.delete(
   "/admin/user/:id",
-  // adminAuth,
+  adminAuth,
   async (req, res) => {
     try {
       if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({ message: "Invalid Id" });
       }
 
+      if (!req.user) {
+        return res.status(401).json({ message: "Unauthorized" });
+      }
+
       // Prevent self delete
-      if (req.user.id === req.params.id) {
+      if (req.user._id.toString() === req.params.id) {
         return res
           .status(400)
           .json({ message: "You cannot delete your own account" });
