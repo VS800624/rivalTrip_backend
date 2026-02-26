@@ -13,18 +13,38 @@ const adminRouter = require("./routes/admin")
 const userRouter = require("./routes/user")
 
 // Setup cors
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:5173",
+//       "http://localhost:5174",
+//       "https://rivaltrip.netlify.app",
+//       "http://127.0.0.1:5173",
+//     ],
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE",  "OPTIONS"],
+//     credentials: true,
+//   })
+// )
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "https://rivaltrip.netlify.app",
+  "http://127.0.0.1:5173",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://rivaltrip.netlify.app",
-      "http://127.0.0.1:5173",
-    ],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE",  "OPTIONS"],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, origin);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
-)
+);
 
 // // HANDLE PREFLIGHT EXPLICITLY
 // app.options(/.*/, cors());

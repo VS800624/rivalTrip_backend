@@ -55,7 +55,7 @@ userRouter.get(
 );
 
 // Change user role
-userRouter.patch(
+userRouter.put(
   "/admin/user/:id/role",
   // adminAuth,
   async (req, res) => {
@@ -101,7 +101,7 @@ userRouter.patch(
 );
 
 // Change user status
-userRouter.patch(
+userRouter.put(
   "/admin/user/:id/status",
   // adminAuth,
   async (req, res) => {
