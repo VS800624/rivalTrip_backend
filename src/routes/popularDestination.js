@@ -1,8 +1,8 @@
 const express = require("express");
 const PopularDestination = require("../models/popularDestination");
-const adminAuth = require("../middleware/auth");
 const { validateAndFormatDestination } = require("../utils/validation");
 const { default: mongoose } = require("mongoose");
+const { adminAuth } = require("../middleware/auth");
 const popularDestinationsRouter = express.Router();
 
 // Get Popular Destinations public

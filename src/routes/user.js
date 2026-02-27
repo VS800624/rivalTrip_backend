@@ -1,9 +1,9 @@
 const express = require("express");
-const adminAuth = require("../middleware/auth");
+const {adminAuth} = require("../middleware/auth");
 const User = require("../models/user");
 const { default: mongoose } = require("mongoose");
 const userRouter = express.Router();
-const userAuth = require("../middleware/auth")
+const {userAuth} = require("../middleware/auth")
 
 // get me
 userRouter.get("/me", userAuth , async(req,res) => {

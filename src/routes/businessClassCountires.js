@@ -1,6 +1,6 @@
 const express = require("express");
 const BusinessClassCountries = require("../models/businessClassCountries");
-const adminAuth = require("../middleware/auth");
+const {adminAuth} = require("../middleware/auth");
 const { validateAndFormatDestination } = require("../utils/validation");
 const { default: mongoose } = require("mongoose");
 const businessClassCountriesRouter = express.Router();
