@@ -4,6 +4,8 @@ const User = require("../models/user");
 const { default: mongoose } = require("mongoose");
 const userRouter = express.Router();
 
+
+
 // get all users
 userRouter.get(
   "/admin/users",
