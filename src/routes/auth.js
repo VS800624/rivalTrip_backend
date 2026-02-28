@@ -36,19 +36,19 @@ authRouter.post("/signup", async (req, res) => {
     //   // httpOnly: true,
     // });
 
-      res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "lax", // REQUIRED for localhost
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    });
-
-
-    // res.cookie("token", token, {
+    //   res.cookie("token", token, {
     //   httpOnly: true,
-    //   secure: true,        // REQUIRED for HTTPS (Render)
-    //   sameSite: "none",    // REQUIRED for Netlify → Render
-    //   maxAge: 24 * 60 * 60 * 1000, // 1 day
+    //   sameSite: "lax", // REQUIRED for localhost
+    //   expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     // });
+
+
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,        // REQUIRED for HTTPS (Render)
+      sameSite: "none",    // REQUIRED for Netlify → Render
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
+    });
 
     const userResponse = savedUser.toObject();
     delete userResponse.password;
@@ -104,19 +104,19 @@ authRouter.post("/login", async (req, res) => {
     //   // httpOnly: true,
     // });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      sameSite: "lax", // REQUIRED for localhost
-      expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    });
-
-    
     // res.cookie("token", token, {
     //   httpOnly: true,
-    //   secure: true, // REQUIRED for HTTPS (Render)
-    //   sameSite: "none", // REQUIRED for Netlify → Render
-    //   maxAge: 24 * 60 * 60 * 1000, // 1 day
+    //   sameSite: "lax", // REQUIRED for localhost
+    //   expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     // });
+
+    
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // REQUIRED for HTTPS (Render)
+      sameSite: "none", // REQUIRED for Netlify → Render
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
+    });
 
     // const userResponse = user.toObject()
     // delete userResponse.password
