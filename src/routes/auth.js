@@ -42,11 +42,10 @@ authRouter.post("/signup", async (req, res) => {
     //   expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     // });
 
-
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true,        // REQUIRED for HTTPS (Render)
-      sameSite: "none",    // REQUIRED for Netlify → Render
+      secure: true, // REQUIRED for HTTPS (Render)
+      sameSite: "none", // REQUIRED for Netlify → Render
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 day
     });
 
@@ -78,13 +77,20 @@ authRouter.post("/login", async (req, res) => {
 
     if (!emailId || !password) {
       return res.status(400).json({ message: "Email and password required" });
-      }
+    }
 
     // Find user in database:
     const user = await User.findOne({ emailId: emailId }).select("+password");
 
     if (!user) {
       return res.status(400).json({ message: "User not found" });
+    }
+
+    if (user.status === "blocked") {
+      return res.status(403).json({
+        message: "Your account has been blocked by admin",
+        status: "blocked",
+      });
     }
 
     // Password comparison:
@@ -110,7 +116,6 @@ authRouter.post("/login", async (req, res) => {
     //   expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     // });
 
-    
     res.cookie("token", token, {
       httpOnly: true,
       secure: true, // REQUIRED for HTTPS (Render)
@@ -131,19 +136,17 @@ authRouter.post("/login", async (req, res) => {
   }
 });
 
-authRouter.post("/logout", async(req,res) => {
-  try{
-  res.cookie("token", null, {
-    expires: new Date(Date.now()),
-    httpOnly: true
-  })
-  
-  res.json({message: "Logout successfully"})
-  }catch(err){
+authRouter.post("/logout", async (req, res) => {
+  try {
+    res.cookie("token", null, {
+      expires: new Date(Date.now()),
+      httpOnly: true,
+    });
+
+    res.json({ message: "Logout successfully" });
+  } catch (err) {
     res.status(500).json({ message: "Internal Server Error: " + err.message });
   }
-})
-
-
+});
 
 module.exports = authRouter;
